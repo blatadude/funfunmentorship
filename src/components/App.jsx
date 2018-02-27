@@ -35,7 +35,7 @@ export default class App extends React.Component {
     return (
       <div className={style.app} >
         <header className={style.mainHeader}>
-          <img src='../logo.svg' />
+          <img src='./logo.svg' />
           <h1 className={style.pageHeading}>
               {
                 this.state.users 
