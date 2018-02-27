@@ -19,7 +19,7 @@ const toArray = (data) => {
     data = []
   }
   return data.filter(item => typeof item === 'string')
-             .map(item => item.trim())
+  .map(item => item.trim())
 }
 
 const isEmpty = (arr) => arr.some(item => !!item)
@@ -35,7 +35,7 @@ export const normalizeMentorship = (mentorship) => {
 }
 
 export const getProfileUrl = (size) => (username) =>
-  `https://discourse-cdn-sjc1.com/standard6/user_avatar/www.funfunforum.com/${username}/${size}/1133_1.png`
+  `https://discourse-cdn-sjc2.com/standard11/user_avatar/www.funfunforum.com/${username}/${size}/1133_1.png`
 
 export const formatUser = (user) => {
   let json = parseHackableJSON(user.hackable_json) || undefined

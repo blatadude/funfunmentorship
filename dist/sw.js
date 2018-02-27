@@ -1,5 +1,5 @@
 self.addEventListener('fetch', function(event) {
-    var discourseUrl = 'https://discourse-cdn-sjc1.com/'
+    var discourseUrl = 'https://discourse'
     if (event.request.url.includes(discourseUrl)) {
         event.respondWith(
             caches.match(event.request).then(function(response) {

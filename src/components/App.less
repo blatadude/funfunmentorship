@@ -22,16 +22,26 @@
     z-index: @z-index--top;
     padding: @padding--base*0.3 @padding--base;
     display: flex;
-    justify-content: space-between;
+    flex-flow: row wrap;
+    align-items: flex-start;
     box-shadow: @box-shadow--base;
-
+    img {
+        height: 3rem;
+        padding-right: @padding--base;
+        margin: auto 0;
+    }
     @media (max-width: @bp-mobile) {
-        display: block;
-        text-align: center;
+        img {
+            flex-basis: 25%;
+        }
+        .pageHeading {
+            flex-basis: 75%;
+            font-size: 1em;
+        }
     }
 }
 
 .pageHeading {
     font-size: 1.2em;
-    padding: 0;
+    margin-right: auto;
 }
