@@ -4,7 +4,7 @@ import UserTile from './UserTile'
 import Filter from './Filter'
 import style from './App.less'
 import { makeFetchUsers, userMentionsSkill } from '../users'
-
+import logo from '../logo.svg'
 const fetchUsers = makeFetchUsers(async () =>
   await (await fetch('https://ffforumautomator.herokuapp.com/hackable-data')).json()
 )
@@ -35,7 +35,7 @@ export default class App extends React.Component {
     return (
       <div className={style.app} >
         <header className={style.mainHeader}>
-          <img src='./logo.svg' />
+          <img src={logo} />
           <h1 className={style.pageHeading}>
               {
                 this.state.users 

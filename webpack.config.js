@@ -59,7 +59,11 @@ module.exports = {
       {
         test: /\.json$/,
         loader: 'json-loader'
-      }
+      },
+      {
+        test: /\.svg$/,
+        loader: 'file-loader'
+      },
     ]
   },
   plugins: [
