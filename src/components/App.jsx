@@ -35,7 +35,9 @@ export default class App extends React.Component {
     return (
       <div className={style.app} >
         <header className={style.mainHeader}>
-          <img src={logo} />
+          <a className={style.logo} href="/funfunmentorship">
+            <img src={logo} />
+          </a>
           <h1 className={style.pageHeading}>
               {
                 this.state.users 

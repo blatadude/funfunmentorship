@@ -25,23 +25,27 @@
     flex-flow: row wrap;
     align-items: flex-start;
     box-shadow: @box-shadow--base;
-    img {
-        height: 3rem;
-        padding-right: @padding--base;
-        margin: auto 0;
-    }
+    
     @media (max-width: @bp-mobile) {
-        img {
-            flex-basis: 25%;
-        }
+        padding: @padding--base*0.3 @padding--base*0.5;
         .pageHeading {
             flex-basis: 75%;
+            margin: auto 0;
             font-size: 1em;
         }
     }
 }
-
+.logo  {
+    margin: auto 0;
+    display: block;
+    img {
+        display: block;
+        margin: auto;
+        height: 2.5rem;
+    }
+}
 .pageHeading {
+    padding-left: @padding--base*0.5;
     font-size: 1.2em;
-    margin-right: auto;
+    margin: auto auto auto 0;
 }
