@@ -35,6 +35,9 @@
     "css-loader": "^0.28.7",
     "eslint": "^4.7.0",
     "file-loader": "^0.11.2",
+    "html-webpack-harddisk-plugin": "^0.1.0",
+    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-react-root-plugin": "^0.9.0",
     "json-loader": "^0.5.7",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
@@ -47,6 +50,7 @@
     "react-hot-loader": "^3.0.0-beta.6",
     "react-lazyload": "^2.2.7",
     "style-loader": "^0.18.2",
+    "webapp-webpack-plugin": "^1.0.1",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.4.1"
   },
