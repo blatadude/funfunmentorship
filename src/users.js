@@ -4,19 +4,12 @@ import Maybe from 'maybe'
 const benignErrorCodes = [
   'warming_up'
 ]
-const parseHackableJSON = (hackableJSON) =>
-  Maybe(
-    R.tryCatch(
-      JSON.parse, 
-      R.F
-    )(hackableJSON))
-  .value()
 
   // 1. Get ugly-ass input as map with username as keys
   // 2. use a function that use mapObjIndexed to return pojo with 
   //    FIELDS: 
   //      username  |  mentorship                  |  location
-//          from key,   parse,                          
+//          from key,   parse,                          if field is not null
 //                        take each mentKey       
 //                          map values
 //                          add to array
@@ -25,16 +18,11 @@ const parseHackableJSON = (hackableJSON) =>
 //                          keep all that are strings
 //                          trim all string whitespace
 //                          reject empty strings  
-
-
-
-  // Takes in any input, adds them to an array, unnests it to a single level array
-  // If any are Nullish they are rejected, everything else is stringified
-  // Then trimmed, then filtered to remove any empty strings
-  // Returns [] at the least
-
-  // toStringArray :: a -> [a] -> [@NotNull a] -> [String] -> [String] -> [@NotEmpty String]
-  const toStringArray = 
+//                          return either arr of vals or empty arr 
+  
+// toStringArray :: [a] -> [[a]] -> [a] -> [@NotNull a] -> [String] -> [String] -> [@NotEmpty String]
+  
+const toStringArray = 
       R.pipe(
         // magic nesty part
         R.of, // a -> [a] | [a] -> [[a]] | [[a]] -> [[[a]]]
@@ -44,11 +32,52 @@ const parseHackableJSON = (hackableJSON) =>
         R.filter(R.is(String)), // [NotNull a] -> [String] 
         R.map(R.trim), // [String] -> [String]
         R.reject(R.isEmpty), // [String] -> [@NotEmpty String]
-      )
+    )
 
-  export const normalizeUserTransformations = {
+const howToFixUserBullshit = 
+    R.pipe(
+      R.mapObjIndexed(addUsername), // object -> [object]
+      R.map(
+        R.over(R.lensProp('hackable_json'), parseHackable),        
+      ), // [object -> [object]
+      R.reject(R.propEq('hackable_json', R.F)), // [object -> [object]
+      R.map(
+        R.pipe(
+          R.assoc('mentorship', R.path(['hackable_json', 'mentorship'])),
+          R.over(R.lensPath(['mentorship', 'offering'], toStringArray)),
+          R.over(R.lensPath(['mentorship', 'seeking'], toStringArray))
+        )
+    ),
+    R.filter(R.pipe(
+        R.view(R.lensProp),
+        R.where({ offering: !R.isNil, seeking: !R.isNil })
+    )),
+    R.map(
+      R.assoc('location', R.propOr())
+    )
+  )
+const addUsername = (hackable_json, username, allUsers) => (
+  { hackable_json, 
     username
   }
+)
+
+const parseHackable = R.tryCatch(
+  JSON.parse, 
+  R.F
+)
+
+
+
+
+
+
+
+
+
+const fixUserBullshit = (hackable_json, username, users) => {
+      return R.merge({ username }, R.evolve(howToFixUserBullshit, hackable_json))
+}
   export const normalizeMentorship = (mentorship) => {
     if (!mentorship) return undefined
     const seeking = toStringArray(mentorship.seeking)
@@ -81,13 +110,11 @@ export const formatUser = (hackable_json, username, userObj) => {
       : undefined
   }
 }
+
 // formatUsersWithTransducer :: Object -> [Object]
 export const formatUsersWithTransducer = R.pipe(
-  // transformUsertoObj,
   R.mapObjIndexed(formatUser),
-  R.tap(console.log),
   R.filter(user => !!user.mentorship),
-  R.tap(console.log),
   R.values,
   )
 
