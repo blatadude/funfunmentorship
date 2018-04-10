@@ -1,12 +1,14 @@
 import { expect } from 'chai'
 import { cloneDeep } from 'lodash'
 import { mpj, DavDavDavid, igor, bobbyTables, jimmyPesto, badJason } from './fixtures'
-import { formatUser, makeFetchUsers, userMentionsSkill, normalizeMentorship } from '../src/users'
-
+import { formatUsersWithTransducer, makeFetchUsers, userMentionsSkill, normalizeMentorship } from '../src/users'
+import { mergeAll } from 'ramda'
 describe('user utils', () => {
 
   it('should format the user data correctly', () => {
-    const test = user => expect(formatUser(user.rawData()))
+    const test = user => expect(
+      formatUsersWithTransducer(user.rawData())[0]
+    )
       .to.deep.equal(user.formattedData())
     test(mpj)
     test(DavDavDavid)
@@ -18,7 +20,7 @@ describe('user utils', () => {
 
   it('should filter non-participatory users from the raw endpoint json', async () => {
     const fetchUsers = makeFetchUsers(() =>
-      [ mpj.rawData(), DavDavDavid.rawData(), igor.rawData() ]
+      mergeAll([ badJason.rawData(), DavDavDavid.rawData(), igor.rawData() ])
     )
     expect(await fetchUsers()).to.deep.equal([DavDavDavid.formattedData(), igor.formattedData()])
   })

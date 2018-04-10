@@ -5,6 +5,7 @@ const WebappWebpackPlugin = require('webapp-webpack-plugin')
 const HTMLPlugin = require('html-webpack-plugin')
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
 const ReactRootPlugin = require('html-webpack-react-root-plugin');
+// const HappyPack = require('happypack');
 const OUT_DIR = path.resolve(__dirname, './dist')
 const PORT = process.env.PORT || 9876
 const testExitCode = process.env.TRAVIS_TEST_RESULT // 0 for passes tests, don't set to anything in dev env
@@ -55,7 +56,8 @@ module.exports = {
               ]
             }
           },
-          { loader: 'less-loader', options: {
+          { loader: 'less-loader', 
+          options: {
             sourceMap: true
           }},
         ]
@@ -75,8 +77,12 @@ module.exports = {
     new webpack.optimize.ModuleConcatenationPlugin(),
     new HtmlWebpackHarddiskPlugin(),   // Writes html to file
     new ReactRootPlugin(),    // Literally just adds the react root div tag...
-    new WebappWebpackPlugin({    // Generates favicons and iconds from logo
-      logo: path.resolve(OUT_DIR, './public/logo.svg'),
+    
+    //TODO: Separate into build and dev configs. 
+    //WebAppWebPackPlugin literally add 50 seconds to initial webpack dev build 
+
+    new WebappWebpackPlugin({    // Generates 44 favicons and icons from logo
+      logo: path.resolve(__dirname, './public/logo.svg'),
       favicons: {
         appName: 'FunFunMentorship',
         theme_color: "#dee6f2",
@@ -90,15 +96,16 @@ module.exports = {
     // TODO: Not cache 100s of MB of images for each user 
     // In bird culture, this is considered a dick move.
     // Why are some user profile images so massive? Maybe scale in SW somehow
-    new OfflinePlugin({
-      ServiceWorker : {
-        entry: path.resolve(OUT_DIR, './sw.js')
-      },
-      externals: [
-        'https://ffforumautomator.herokuapp.com/hackable-data',
-        '/funfunmentorship/',
-      ]
-    })
+    
+    // new OfflinePlugin({
+    //   ServiceWorker : {
+    //     entry: path.resolve(OUT_DIR, './sw.js')
+    //   },
+    //   externals: [
+    //     'https://ffforumautomator.herokuapp.com/hackable-data',
+    //     '/funfunmentorship/',
+    //   ]
+    // })
   ],
   resolve: {
     extensions: ['.js', '.jsx']
