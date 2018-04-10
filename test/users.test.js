@@ -6,6 +6,7 @@ import { mergeAll } from 'ramda'
 describe('user utils', () => {
 
   it('should format the user data correctly', () => {
+    // Might move to R.where inside an expect call
     const test = user => expect(
       formatUsersWithTransducer(user.rawData())[0]
     )
